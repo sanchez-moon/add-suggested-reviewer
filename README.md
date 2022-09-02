@@ -1,6 +1,6 @@
-# Blame alert
+# Add suggested reviewer
 
-GitHub action which tags users whose code has been altered in a PR. It uses `git blame` to determine who is the author of the code which has changed.
+This repo inspirited by https://github.com/molleer/blame-alert
 
 ### Usage
 

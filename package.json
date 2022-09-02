@@ -1,5 +1,5 @@
 {
-  "name": "blame-alert",
+  "name": "add-suggested-reviewer",
   "version": "1.0.0",
   "description": "Gihub action which tags users whose code has been removed in a PR",
   "main": "src/index.ts",
@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/molleer/blame-alert.git"
+    "url": "git+https://github.com/sanchez-moon/add-suggested-reviewer"
   },
   "author": "David Möller",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/molleer/blame-alert/issues"
+    "url": "https://github.com/sanchez-moon/add-suggested-reviewer/issues"
   },
-  "homepage": "https://github.com/molleer/blame-alert#readme",
+  "homepage": "https://github.com/sanchez-moon/add-suggested-reviewer#readme",
   "devDependencies": {
     "@types/mocha": "^8.0.3",
     "@types/node": "^14.6.3",

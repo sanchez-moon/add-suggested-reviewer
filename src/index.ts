@@ -43,11 +43,12 @@ const run = async (): Promise<void> => {
     message += " @" + userNames[i];
   }
 
-  //Commenting on the PR
-  octokit.issues.createComment({
-    ...github.context.repo,
-    issue_number: request.number,
-    body: message
+  //request review on the PR
+  octokit.pulls.requestReviewers({
+    owner: github.context.repo.owner,
+    pull_number: request.number,
+    repo: github.context.repo.repo,
+    reviewers: userNames
   });
 };
 
