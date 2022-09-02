@@ -2,7 +2,7 @@ import * as github from "@actions/github";
 import * as core from "@actions/core";
 import * as git from "run-git-command";
 import Axios from "axios";
-import { Change, parseDiff, parseBlame, handle } from "./utils";
+import { Change, parseDiff, getUserNames, parseBlame, handle } from "./utils";
 
 const run = async (): Promise<void> => {
   const request = github.context.payload.pull_request;
@@ -36,8 +36,10 @@ const run = async (): Promise<void> => {
     handle("Failed to fetch author emails", err, [])
   );
   core.debug(`Author emails ${emails.toString()}`);
+  let userNames: string[] = await getUserNames(emails).catch(() => []);
+  userNames = userNames.filter(name => name !== github.context.actor);
 
-  if (emails.length == 0) {
+  if (userNames.length == 0) {
     console.log("No Suggested Reviewer");
     await octokit.issues.createComment({
       ...github.context.repo,
@@ -47,13 +49,26 @@ const run = async (): Promise<void> => {
     return;
   }
 
+  //Creates a message which will be commented on the PR
+  let message = "Your code will change with this PR!";
+  for (let i = 0; i < userNames.length; i++) {
+    message += " @" + userNames[i];
+  }
+  console.log(message);
+
   //request review on the PR
-  await octokit.pulls.requestReviewers({
-    owner: github.context.repo.owner,
-    pull_number: request.number,
-    repo: github.context.repo.repo,
-    reviewers: emails
-  });
+  await Promise.all([
+    octokit.pulls.requestReviewers({
+      ...github.context.repo,
+      pull_number: request.number,
+      reviewers: userNames
+    }),
+    octokit.issues.createComment({
+      ...github.context.repo,
+      issue_number: request.number,
+      body: message
+    })
+  ]);
 };
 
 const changesToString = (change: Change[]): string => {
