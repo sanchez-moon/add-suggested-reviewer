@@ -18,8 +18,8 @@ jobs:
         with:
           ref: ${{ github.base_ref }}
           fetch-depth: 0
-      - name: Blame Alert
-        uses: molleer/blame-alert@master
+      - name: Add Suggested Reviewer
+        uses: sanchez-moon/add-suggested-reviewer@master
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```

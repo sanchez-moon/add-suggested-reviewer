@@ -33,7 +33,12 @@ const run = async (): Promise<void> => {
   userNames = userNames.filter(name => name !== github.context.actor);
 
   if (userNames.length == 0) {
-    console.log("No users to be alerted");
+    console.log("No Suggested Reviewer");
+    octokit.issues.createComment({
+      ...github.context.repo,
+      issue_number: request.number,
+      body: "No Suggested Reviewer"
+    });
     return;
   }
 
