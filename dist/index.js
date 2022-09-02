@@ -13938,7 +13938,7 @@ var git = __importStar(__webpack_require__(8353));
 var axios_1 = __importDefault(__webpack_require__(6545));
 var utils_1 = __webpack_require__(1314);
 var run = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var request, token, octokit, diff_url, res, changes, emails, userNames, message, i;
+    var request, token, octokit, diff_url, res, changes, emails;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -13972,25 +13972,17 @@ var run = function () { return __awaiter(void 0, void 0, void 0, function () {
             case 2:
                 emails = _a.sent();
                 core.debug("Author emails " + emails.toString());
-                return [4 /*yield*/, utils_1.getUserNames(emails)["catch"](function () { return []; })];
-            case 3:
-                userNames = _a.sent();
-                userNames = userNames.filter(function (name) { return name !== github.context.actor; });
-                if (userNames.length == 0) {
+                if (emails.length == 0) {
                     console.log("No Suggested Reviewer");
                     octokit.issues.createComment(__assign(__assign({}, github.context.repo), { issue_number: request.number, body: "No Suggested Reviewer" }));
                     return [2 /*return*/];
-                }
-                message = "Your code will change with this PR!";
-                for (i = 0; i < userNames.length; i++) {
-                    message += " @" + userNames[i];
                 }
                 //request review on the PR
                 octokit.pulls.requestReviewers({
                     owner: github.context.repo.owner,
                     pull_number: request.number,
                     repo: github.context.repo.repo,
-                    reviewers: userNames
+                    reviewers: emails
                 });
                 return [2 /*return*/];
         }
