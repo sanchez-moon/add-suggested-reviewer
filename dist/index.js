@@ -13938,7 +13938,7 @@ var git = __importStar(__webpack_require__(8353));
 var axios_1 = __importDefault(__webpack_require__(6545));
 var utils_1 = __webpack_require__(1314);
 var run = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var request, token, octokit, diff_url, res, changes, emails, userNames, message, i;
+    var request, token, octokit, diff_url, res, changes, emails, userNames;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -13983,17 +13983,9 @@ var run = function () { return __awaiter(void 0, void 0, void 0, function () {
             case 4:
                 _a.sent();
                 return [2 /*return*/];
-            case 5:
-                message = "Your code will change with this PR!";
-                for (i = 0; i < userNames.length; i++) {
-                    message += " @" + userNames[i];
-                }
-                console.log(message);
-                //request review on the PR
-                return [4 /*yield*/, Promise.all([
-                        octokit.pulls.requestReviewers(__assign(__assign({}, github.context.repo), { pull_number: request.number, reviewers: userNames })),
-                        octokit.issues.createComment(__assign(__assign({}, github.context.repo), { issue_number: request.number, body: message }))
-                    ])];
+            case 5: 
+            //request review on the PR
+            return [4 /*yield*/, octokit.pulls.requestReviewers(__assign(__assign({}, github.context.repo), { pull_number: request.number, reviewers: userNames }))];
             case 6:
                 //request review on the PR
                 _a.sent();

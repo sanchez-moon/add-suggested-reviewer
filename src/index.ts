@@ -50,26 +50,12 @@ const run = async (): Promise<void> => {
     return;
   }
 
-  //Creates a message which will be commented on the PR
-  let message = "Your code will change with this PR!";
-  for (let i = 0; i < userNames.length; i++) {
-    message += " @" + userNames[i];
-  }
-  console.log(message);
-
   //request review on the PR
-  await Promise.all([
-    octokit.pulls.requestReviewers({
-      ...github.context.repo,
-      pull_number: request.number,
-      reviewers: userNames
-    }),
-    octokit.issues.createComment({
-      ...github.context.repo,
-      issue_number: request.number,
-      body: message
-    })
-  ]);
+  await octokit.pulls.requestReviewers({
+    ...github.context.repo,
+    pull_number: request.number,
+    reviewers: userNames
+  });
 };
 
 const changesToString = (change: Change[]): string => {
