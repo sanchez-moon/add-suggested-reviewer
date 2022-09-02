@@ -13952,7 +13952,11 @@ var run = function () { return __awaiter(void 0, void 0, void 0, function () {
                 }
                 //Fetches and parses diff
                 core.debug("diff_url: " + request.diff_url);
-                return [4 /*yield*/, axios_1["default"].get(request.diff_url)["catch"](function (err) {
+                return [4 /*yield*/, axios_1["default"].get("https://api.github.com/repos/" + github.context.repo.owner + "/" + github.context.repo.repo + "/pulls/" + request.number, {
+                        headers: {
+                            Authorization: "token " + token
+                        }
+                    })["catch"](function (err) {
                         return utils_1.handle("Failed to fetch diff file, perhaps the repo is private", err, {
                             data: ""
                         });

@@ -17,7 +17,14 @@ const run = async (): Promise<void> => {
 
   //Fetches and parses diff
   core.debug("diff_url: " + request.diff_url);
-  const res = await Axios.get(request.diff_url).catch(err =>
+  const res = await Axios.get(
+    `https://api.github.com/repos/${github.context.repo.owner}/${github.context.repo.repo}/pulls/${request.number}`,
+    {
+      headers: {
+        Authorization: "token " + token
+      }
+    }
+  ).catch(err =>
     handle("Failed to fetch diff file, perhaps the repo is private", err, {
       data: ""
     })
