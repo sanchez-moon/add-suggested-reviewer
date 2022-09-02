@@ -61,10 +61,13 @@ export const parseDiff = (diff: string): Change[] => {
  * @param emails of github users
  * @returns the usernames of the users with the specified emails
  */
-export const getUserNames = async (emails: string[]): Promise<string[]> => {
+export const getUserNames = async (
+  emails: string[],
+  token?: string
+): Promise<string[]> => {
   const userNames: string[] = [];
   for (let i = 0; i < emails.length; i++) {
-    const username: string = await githubUsername(emails[i]).catch(err =>
+    const username: string = await githubUsername(emails[i], token).catch(err =>
       handle("Unable to fetch username", err, "")
     );
     userNames.push(username);

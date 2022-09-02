@@ -13972,10 +13972,11 @@ var run = function () { return __awaiter(void 0, void 0, void 0, function () {
             case 2:
                 emails = _a.sent();
                 core.debug("Author emails " + emails.toString());
-                return [4 /*yield*/, utils_1.getUserNames(emails)["catch"](function () { return []; })];
+                return [4 /*yield*/, utils_1.getUserNames(emails, token)["catch"](function () { return []; })];
             case 3:
                 userNames = _a.sent();
                 userNames = userNames.filter(function (name) { return name !== github.context.actor; });
+                core.debug("Author username " + userNames.toString());
                 if (!(userNames.length == 0)) return [3 /*break*/, 5];
                 console.log("No Suggested Reviewer");
                 return [4 /*yield*/, octokit.issues.createComment(__assign(__assign({}, github.context.repo), { issue_number: request.number, body: "No Suggested Reviewer" }))];
@@ -14182,7 +14183,7 @@ exports.parseDiff = function (diff) {
  * @param emails of github users
  * @returns the usernames of the users with the specified emails
  */
-exports.getUserNames = function (emails) { return __awaiter(void 0, void 0, void 0, function () {
+exports.getUserNames = function (emails, token) { return __awaiter(void 0, void 0, void 0, function () {
     var userNames, i, username;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -14192,7 +14193,7 @@ exports.getUserNames = function (emails) { return __awaiter(void 0, void 0, void
                 _a.label = 1;
             case 1:
                 if (!(i < emails.length)) return [3 /*break*/, 4];
-                return [4 /*yield*/, github_username_1["default"](emails[i])["catch"](function (err) {
+                return [4 /*yield*/, github_username_1["default"](emails[i], token)["catch"](function (err) {
                         return exports.handle("Unable to fetch username", err, "");
                     })];
             case 2:

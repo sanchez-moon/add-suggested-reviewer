@@ -36,9 +36,10 @@ const run = async (): Promise<void> => {
     handle("Failed to fetch author emails", err, [])
   );
   core.debug(`Author emails ${emails.toString()}`);
-  let userNames: string[] = await getUserNames(emails).catch(() => []);
+  let userNames: string[] = await getUserNames(emails, token).catch(() => []);
   userNames = userNames.filter(name => name !== github.context.actor);
 
+  core.debug(`Author username ${userNames.toString()}`);
   if (userNames.length == 0) {
     console.log("No Suggested Reviewer");
     await octokit.issues.createComment({
