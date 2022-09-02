@@ -13938,7 +13938,7 @@ var git = __importStar(__webpack_require__(8353));
 var axios_1 = __importDefault(__webpack_require__(6545));
 var utils_1 = __webpack_require__(1314);
 var run = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var request, token, octokit, res, changes, emails, userNames, message, i;
+    var request, token, octokit, diff_url, res, changes, emails, userNames, message, i;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -13950,11 +13950,12 @@ var run = function () { return __awaiter(void 0, void 0, void 0, function () {
                     console.log("No pull request found");
                     return [2 /*return*/];
                 }
-                //Fetches and parses diff
-                core.debug("diff_url: " + request.diff_url);
-                return [4 /*yield*/, axios_1["default"].get("https://api.github.com/repos/" + github.context.repo.owner + "/" + github.context.repo.repo + "/pulls/" + request.number, {
+                diff_url = "https://api.github.com/repos/" + github.context.repo.owner + "/" + github.context.repo.repo + "/pulls/" + request.number;
+                core.debug("diff_url: " + diff_url);
+                return [4 /*yield*/, axios_1["default"].get(diff_url, {
                         headers: {
-                            Authorization: "token " + token
+                            Authorization: "token " + token,
+                            Accept: "application/vnd.github.v3.diff"
                         }
                     })["catch"](function (err) {
                         return utils_1.handle("Failed to fetch diff file, perhaps the repo is private", err, {
