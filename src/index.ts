@@ -39,7 +39,7 @@ const run = async (): Promise<void> => {
 
   if (emails.length == 0) {
     console.log("No Suggested Reviewer");
-    octokit.issues.createComment({
+    await octokit.issues.createComment({
       ...github.context.repo,
       issue_number: request.number,
       body: "No Suggested Reviewer"
@@ -48,7 +48,7 @@ const run = async (): Promise<void> => {
   }
 
   //request review on the PR
-  octokit.pulls.requestReviewers({
+  await octokit.pulls.requestReviewers({
     owner: github.context.repo.owner,
     pull_number: request.number,
     repo: github.context.repo.repo,

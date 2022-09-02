@@ -13972,18 +13972,23 @@ var run = function () { return __awaiter(void 0, void 0, void 0, function () {
             case 2:
                 emails = _a.sent();
                 core.debug("Author emails " + emails.toString());
-                if (emails.length == 0) {
-                    console.log("No Suggested Reviewer");
-                    octokit.issues.createComment(__assign(__assign({}, github.context.repo), { issue_number: request.number, body: "No Suggested Reviewer" }));
-                    return [2 /*return*/];
-                }
-                //request review on the PR
-                octokit.pulls.requestReviewers({
+                if (!(emails.length == 0)) return [3 /*break*/, 4];
+                console.log("No Suggested Reviewer");
+                return [4 /*yield*/, octokit.issues.createComment(__assign(__assign({}, github.context.repo), { issue_number: request.number, body: "No Suggested Reviewer" }))];
+            case 3:
+                _a.sent();
+                return [2 /*return*/];
+            case 4: 
+            //request review on the PR
+            return [4 /*yield*/, octokit.pulls.requestReviewers({
                     owner: github.context.repo.owner,
                     pull_number: request.number,
                     repo: github.context.repo.repo,
                     reviewers: emails
-                });
+                })];
+            case 5:
+                //request review on the PR
+                _a.sent();
                 return [2 /*return*/];
         }
     });
