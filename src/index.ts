@@ -45,7 +45,7 @@ const run = async (): Promise<void> => {
     await octokit.issues.createComment({
       ...github.context.repo,
       issue_number: request.number,
-      body: "(BOT) No Suggested Reviewer"
+      body: "**[🤖BOT]** No Suggested Reviewer"
     });
     return;
   }
@@ -56,7 +56,7 @@ const run = async (): Promise<void> => {
       ...github.context.repo,
       issue_number: request.number,
       body:
-        "(BOT) Add Reviewer: " +
+        "**[🤖BOT]** Add Reviewer: " +
         userNames.map(username => "@" + username).join(", ")
     }),
     octokit.pulls.requestReviewers({
