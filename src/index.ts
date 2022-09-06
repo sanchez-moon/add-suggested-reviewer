@@ -45,17 +45,26 @@ const run = async (): Promise<void> => {
     await octokit.issues.createComment({
       ...github.context.repo,
       issue_number: request.number,
-      body: "No Suggested Reviewer"
+      body: "(BOT) No Suggested Reviewer"
     });
     return;
   }
 
   //request review on the PR
-  await octokit.pulls.requestReviewers({
-    ...github.context.repo,
-    pull_number: request.number,
-    reviewers: userNames
-  });
+  await Promise.all([
+    octokit.issues.createComment({
+      ...github.context.repo,
+      issue_number: request.number,
+      body:
+        "(BOT) Add Reviewer: " +
+        userNames.map(username => "@" + username).join(", ")
+    }),
+    octokit.pulls.requestReviewers({
+      ...github.context.repo,
+      pull_number: request.number,
+      reviewers: userNames
+    })
+  ]);
 };
 
 const changesToString = (change: Change[]): string => {

@@ -13979,13 +13979,17 @@ var run = function () { return __awaiter(void 0, void 0, void 0, function () {
                 core.debug("Author username " + userNames.toString());
                 if (!(userNames.length == 0)) return [3 /*break*/, 5];
                 console.log("No Suggested Reviewer");
-                return [4 /*yield*/, octokit.issues.createComment(__assign(__assign({}, github.context.repo), { issue_number: request.number, body: "No Suggested Reviewer" }))];
+                return [4 /*yield*/, octokit.issues.createComment(__assign(__assign({}, github.context.repo), { issue_number: request.number, body: "(BOT) No Suggested Reviewer" }))];
             case 4:
                 _a.sent();
                 return [2 /*return*/];
             case 5: 
             //request review on the PR
-            return [4 /*yield*/, octokit.pulls.requestReviewers(__assign(__assign({}, github.context.repo), { pull_number: request.number, reviewers: userNames }))];
+            return [4 /*yield*/, Promise.all([
+                    octokit.issues.createComment(__assign(__assign({}, github.context.repo), { issue_number: request.number, body: "(BOT) Add Reviewer: " +
+                            userNames.map(function (username) { return "@" + username; }).join(", ") })),
+                    octokit.pulls.requestReviewers(__assign(__assign({}, github.context.repo), { pull_number: request.number, reviewers: userNames }))
+                ])];
             case 6:
                 //request review on the PR
                 _a.sent();
