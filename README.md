@@ -5,7 +5,8 @@ This repo inspirited by https://github.com/molleer/blame-alert
 ### Usage
 
 ```yml
-name: CI
+name: Add suggested reviewer
+
 on:
   pull_request:
 
@@ -14,14 +15,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
-          ref: ${{ github.base_ref }}
+          # Add GITHUB PERSONAL ACCESS TOKEN to repository secrets
+          # @see https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token
+          token: ${{ secrets.PAT_TOKEN }}
+          submodules: recursive
           fetch-depth: 0
       - name: Add Suggested Reviewer
         uses: sanchez-moon/add-suggested-reviewer@master
         with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
 ```
 
 ### Example
