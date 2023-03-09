@@ -1,6 +1,6 @@
 {
   "name": "add-suggested-reviewer",
-  "version": "1.0.0",
+  "version": "2.0.2",
   "description": "Gihub action which tags users whose code has been removed in a PR",
   "main": "src/index.ts",
   "scripts": {
