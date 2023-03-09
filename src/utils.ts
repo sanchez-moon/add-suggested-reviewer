@@ -67,10 +67,11 @@ export const getUserNames = async (
 ): Promise<string[]> => {
   const userNames: string[] = [];
   for (let i = 0; i < emails.length; i++) {
-    const username: string = await githubUsername(emails[i], token).catch(err =>
-      handle("Unable to fetch username", err, "")
-    );
-    userNames.push(username);
+    const username: string | undefined = await githubUsername(
+      emails[i],
+      token
+    ).catch(err => handle("Unable to fetch username", err, ""));
+    if (username) userNames.push(username);
   }
   return [...new Set(userNames)];
 };
