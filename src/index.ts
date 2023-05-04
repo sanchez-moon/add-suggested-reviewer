@@ -35,7 +35,7 @@ const run = async (): Promise<void> => {
   const emails: string[] = await getAuthors(changes).catch(err =>
     handle("Failed to fetch author emails", err, [])
   );
-  core.debug(`Author emails ${emails.toString()}`);
+  console.log(`Author emails ${emails.toString()}`);
   let userNames: string[] = await getUserNames(emails, token).catch(() => []);
   userNames = userNames.filter(name => name !== github.context.actor);
 
@@ -92,7 +92,7 @@ const getAuthors = async (changes: Change[]): Promise<string[]> => {
         changes[i].file
       ])
       .catch(err => handle("Unable to execute git blame command", err, ""));
-    core.debug(String(blame));
+    console.log(String(blame));
     emails.push(...parseBlame(String(blame)));
   }
   return [...new Set(emails)];
