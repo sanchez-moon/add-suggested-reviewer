@@ -70,14 +70,17 @@ export const getUserNames = async (
     const username: string | undefined = await githubUsername(
       emails[i],
       token
-    ).catch(err => handle("Unable to fetch username", err, ""));
+    ).catch(err => {
+      handle("Unable to fetch username", err, "");
+      core.error(emails[i]);
+    });
     if (username) userNames.push(username);
   }
   return [...new Set(userNames)];
 };
 
 export const handle = <T>(message: string, err: string, catchValue: T): T => {
-  core.debug(message);
-  core.debug(err);
+  core.error(message);
+  core.error(err);
   return catchValue;
 };
