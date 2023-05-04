@@ -11,7 +11,7 @@ const run = async (): Promise<void> => {
 
   //Checks if there have been a pull request
   if (!request) {
-    console.log("No pull request found");
+    core.info("No pull request found");
     return;
   }
 
@@ -35,13 +35,13 @@ const run = async (): Promise<void> => {
   const emails: string[] = await getAuthors(changes).catch(err =>
     handle("Failed to fetch author emails", err, [])
   );
-  console.log(`Author emails ${emails.toString()}`);
+  core.info(`Author emails ${emails.toString()}`);
   let userNames: string[] = await getUserNames(emails, token).catch(() => []);
   userNames = userNames.filter(name => name !== github.context.actor);
 
   core.debug(`Author username ${userNames.toString()}`);
   if (userNames.length == 0) {
-    console.log("No Suggested Reviewer");
+    core.info("No Suggested Reviewer");
     await octokit.issues.createComment({
       ...github.context.repo,
       issue_number: request.number,
@@ -92,7 +92,7 @@ const getAuthors = async (changes: Change[]): Promise<string[]> => {
         changes[i].file
       ])
       .catch(err => handle("Unable to execute git blame command", err, ""));
-    console.log(String(blame));
+    core.debug(String(blame));
     emails.push(...parseBlame(String(blame)));
   }
   return [...new Set(emails)];
