@@ -67,12 +67,10 @@ export const getUserNames = async (
 ): Promise<string[]> => {
   const userNames: string[] = [];
   for (let i = 0; i < emails.length; i++) {
-    const username: string | undefined = await githubUsername(
-      emails[i],
-      token
-    ).catch(err => {
+    const email = emails[i];
+    const username = await getUsername(email, token).catch(err => {
       handle("Unable to fetch username", err, "");
-      core.error(emails[i]);
+      core.error(email);
     });
     if (username) userNames.push(username);
   }
@@ -83,4 +81,22 @@ export const handle = <T>(message: string, err: string, catchValue: T): T => {
   core.error(message);
   core.error(err);
   return catchValue;
+};
+
+const getUsername = async (maybeNoReplyMail: string, token?: string) => {
+  let username;
+  const noReplyMailPattern = /[0-9]*\+?([\w\W]+)\@users\.noreply\.github\.com/;
+  const noReplyMailMatch = maybeNoReplyMail.match(noReplyMailPattern);
+  if (noReplyMailMatch) {
+    username = noReplyMailMatch[1];
+    return username;
+  }
+
+  const justReplyEmail = maybeNoReplyMail;
+  username = await githubUsername(justReplyEmail, token).catch(err => {
+    handle("Unable to fetch username", err, "");
+    core.error(justReplyEmail);
+  });
+
+  return username;
 };
